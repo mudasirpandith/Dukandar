@@ -7,14 +7,15 @@ const ProductSchema = new mongoose.Schema({
     name: {
         type: String
     },
-    description: { type: String },
+    description: {
+        type: String
+    },
     price: {
         type: Number
     },
     brand: {
         type: String
     },
-
     in_stock: {
         type: Number,
         default: 0
@@ -40,9 +41,7 @@ const ProductSchema = new mongoose.Schema({
     care_instructions: [],
     country_of_origin: { type: String },
     return_policy: { type: String },
-
     tags: []
 });
-
 const Product = mongoose.model("products", ProductSchema);
 module.exports = Product;

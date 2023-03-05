@@ -27,18 +27,16 @@ exports.userSignUp = async (req, res, next) => {
 }
 exports.userSigIn = async (req, res) => {
     const { email, password } = req.body;
-    console.log(req.body)
     try {
         if (!email || !password) {
             return res.status(422).json({ error: "Please fill all the fileds" })
         }
         const user = await User.findOne({ email })
-        console.log(user)
         if (!user) {
             return res.status(404).json({ error: "Invalid Email or Pass" })
 
         }
-        const doMatch = await bcrypt.compare(password, user.password)
+        const doMatch = bcrypt.compare(password, user.password)
         if (!doMatch) {
             return res.status(401).json({
                 error: "Invalid Email or Pass"
@@ -57,15 +55,10 @@ exports.getUser = async (req, res) => {
     if (!authorization) {
         return res.status(401).json({ error: "😡😡😡😡" })
     } else {
-
         try {
-
-            const { userId } = await jwt.verify(authorization, JWTSECRECT);
+            const { userId } = jwt.verify(authorization, JWTSECRECT);
             const user = await User.findOne({ _id: ObjectId(userId) })
             res.status(200).json({ user })
-
-
-
         } catch (error) {
             console.log(error)
         }
@@ -74,7 +67,7 @@ exports.getUser = async (req, res) => {
 }
 exports.userUpdate = async (req, res) => {
     const { authorization } = req.headers
-    const { userId } = await jwt.verify(authorization, JWTSECRECT);
+    const { userId } = jwt.verify(authorization, JWTSECRECT);
     const user = await User.findOne({ _id: ObjectId(userId) })
     const { name,
         phoneNumber,
@@ -105,6 +98,4 @@ exports.userUpdate = async (req, res) => {
     } catch (error) {
         console.log(error)
     }
-
-
 }

@@ -1,10 +1,8 @@
 var mongoose = require("mongoose");
-
 const jwt = require('jsonwebtoken')
 const JWTSECRECT = 'KJNHJSDEGHJVFEBHJH'
 const userSchema = new mongoose.Schema({
   username: {
-
     type: String,
     default: "Nan"
   },
@@ -18,77 +16,7 @@ const userSchema = new mongoose.Schema({
     type: Number,
     default: 000,
   },
-  address: {
-    type: String,
-    default: "Nan"
-  },
-  landmark: {
-    type: String,
-    default: "Nan"
-  },
-
-  district: {
-    type: String,
-    default: "Nan"
-  },
-  state: {
-    type: String,
-    default: "Nan"
-  },
-
-  pin: {
-    type: String,
-    default: 00000
-  },
-  productsInCart: [
-    {
-      type: Object,
-      default: {
-        id: {
-          type: String,
-          default: ""
-        },
-        title: {
-          type: String,
-          default: ""
-        },
-        description: { type: String, default: "" },
-        price: {
-          type: Number, default: 1
-        },
-        discountPercentage: {
-          type: Number, default: 1
-        },
-        rating: {
-          type: Number, default: 1
-        },
-        stock: {
-          type: Number,
-          default: 0
-        },
-        brand: {
-          type: String, default: ""
-        },
-        category: {
-          type: String, default: ""
-        },
-        thumbnail: {
-          type: String, default: ""
-        },
-        images: [
-          {}
-        ],
-        noOfProducts: {
-          type: Number,
-          default: 0
-        }
-      }
-    }
-  ],
-  orders: [{
-
-  }]
-
+  
 });
 
 userSchema.statics.createNewUser = async function (userData) {
