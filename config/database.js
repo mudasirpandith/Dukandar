@@ -6,7 +6,7 @@ const connectDataBase = () => {
       // .connect("mongodb://localhost:27017/NewDb", {// useNewUrlParser: true,
       // useUnifiedTopolgy: true,
       // useCreateIndex: true,
-      keepAlive: 9000*1000000000000*100000
+      keepAlive: 9000 * 1000000000000 * 100000
     })
     .then((con) => {
       console.log(
@@ -16,4 +16,3 @@ const connectDataBase = () => {
 };
 
 module.exports = connectDataBase;
-s
