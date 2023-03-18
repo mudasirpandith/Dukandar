@@ -8,17 +8,30 @@ const Order = require('../models/Products/order')
 const Review = require('../models/Products/review')
 const User = require('../models/User/user')
 // get all products for display
-exports.getAllProducts = async (req, res, next) => {
+const NodeCache = require('node-cache');
+const cache = new NodeCache({ stdTTL: 60 * 60 * 60 }); // 1 hour cache
 
+exports.getAllProducts = async (req, res, next) => {
     try {
-        const products = await Product.find({});
-        if (products) {
-            res.status(200).json({ products })
-        } else {
-            res.status(404).json({ message: "NOTHING_FOUND" })
+        const cacheKey = 'all_products';
+        let products = cache.get(cacheKey);
+
+        if (!products) {
+            products = await Product.find({});
+            cache.set(cacheKey, products);
         }
-    } catch (err) { console.log(err) }
-}
+
+        if (products.length > 0) {
+            res.status(200).json({ products });
+        } else {
+            res.status(404).json({ message: 'NOTHING_FOUND' });
+        }
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ message: 'SERVER_ERROR' });
+    }
+};
+
 // get single product which user clicked and want to buy
 exports.getSingleProduct = async (req, res) => {
 
