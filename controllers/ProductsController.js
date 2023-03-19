@@ -7,20 +7,18 @@ const Cart = require('../models/Products/cart')
 const Order = require('../models/Products/order')
 const Review = require('../models/Products/review')
 const User = require('../models/User/user')
-// get all products for display
 const NodeCache = require('node-cache');
-const cache = new NodeCache({ stdTTL: 60 * 60 * 60 }); // 1 hour cache
+const cache = new NodeCache({ stdTTL: 60 * 60 * 1 }); // 1 hour cache
 
 exports.getAllProducts = async (req, res, next) => {
     try {
         const cacheKey = 'all_products';
         let products = cache.get(cacheKey);
-
         if (!products) {
+            console.log('no cached')
             products = await Product.find({});
             cache.set(cacheKey, products);
         }
-
         if (products.length > 0) {
             res.status(200).json({ products });
         } else {
