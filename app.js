@@ -8,8 +8,4 @@ const AppUser = require("./routes/User");
 const Product = require('./routes/Products')
 app.use("/appuser", AppUser);
 app.use("/product", Product)
-
-
-
-
 module.exports = app;

@@ -12,13 +12,13 @@ const cache = new NodeCache({ stdTTL: 60 * 60 * 1 }); // 1 hour cache
 
 exports.getAllProducts = async (req, res, next) => {
     try {
-        const cacheKey = 'all_products';
-        let products = cache.get(cacheKey);
-        if (!products) {
-            console.log('no cached')
-            products = await Product.find({});
-            cache.set(cacheKey, products);
-        }
+        // const cacheKey = 'all_products';
+        // let products = cache.get(cacheKey);
+        // if (!products) {
+        //     console.log('no cached')
+        const products = await Product.find({});
+        //     cache.set(cacheKey, products);
+        // }
         if (products.length > 0) {
             res.status(200).json({ products });
         } else {
@@ -127,7 +127,7 @@ exports.addOrder = async (req, res) => {
         try {
             const { userId } = jwt.verify(authorization, JWTSECRECT);
             const productsInCart = await Cart.find({ userId })
-            const timeAndDate = "Time " + new Date().getHours() + " : " + new Date().getMinutes() + " Dated " + new Date().getDate() + " / " + new Date().getMonth()
+            const timeAndDate = String(new Date()).slice(0, 25);
             await new Order({
                 userId,
                 products: productsInCart,
@@ -175,7 +175,7 @@ exports.addReview = async (req, res) => {
         try {
             const { userId } = jwt.verify(authorization, JWTSECRECT);
             const user = await User.findById({ _id: ObjectId(userId) })
-            const time = new Date().getHours() + " : " + new Date().getMinutes();
+            const time = String(new Date()).slice(0, 25);
             await new Review({
                 productId,
                 userName: user.username,
