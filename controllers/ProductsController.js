@@ -12,13 +12,13 @@ const cache = new NodeCache({ stdTTL: 60 * 60 * 1 }); // 1 hour cache
 
 exports.getAllProducts = async (req, res, next) => {
     try {
-        // const cacheKey = 'all_products';
-        // let products = cache.get(cacheKey);
-        // if (!products) {
-        //     console.log('no cached')
-        const products = await Product.find({});
-        //     cache.set(cacheKey, products);
-        // }
+        const cacheKey = 'all_products';
+        let products = cache.get(cacheKey);
+        if (!products) {
+            console.log('no cached')
+            products = await Product.find({});
+            cache.set(cacheKey, products);
+        }
         if (products.length > 0) {
             res.status(200).json({ products });
         } else {
@@ -120,14 +120,14 @@ exports.deleteProductFromCart = async (req, res) => {
 }
 exports.addOrder = async (req, res) => {
     const { authorization } = req.headers
-    const { address } = req.body
+    const { address, timeOrder } = req.body
     if (!authorization) {
         return res.status(401).json({ error: "😡😡😡😡" })
     } else {
         try {
             const { userId } = jwt.verify(authorization, JWTSECRECT);
             const productsInCart = await Cart.find({ userId })
-            const timeAndDate = String(new Date()).slice(0, 25);
+            const timeAndDate = (timeOrder).slice(0, 25);
             await new Order({
                 userId,
                 products: productsInCart,
@@ -168,14 +168,15 @@ exports.getOrders = async (req, res) => {
 
 exports.addReview = async (req, res) => {
     const { authorization } = req.headers
-    const { review, productId } = req.body;
+    const { review, productId, timeAdd } = req.body;
+
     if (!authorization) {
         return res.status(401).json({ error: "😡😡😡😡" })
     } else {
         try {
             const { userId } = jwt.verify(authorization, JWTSECRECT);
             const user = await User.findById({ _id: ObjectId(userId) })
-            const time = String(new Date()).slice(0, 25);
+            const time = (timeAdd).slice(0, 25);
             await new Review({
                 productId,
                 userName: user.username,
