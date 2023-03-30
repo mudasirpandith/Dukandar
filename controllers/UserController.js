@@ -36,7 +36,7 @@ exports.userSigIn = async (req, res) => {
             return res.status(404).json({ error: "Invalid Email or Pass" })
 
         }
-        const doMatch = bcrypt.compare(password, user.password)
+        const doMatch = await bcrypt.compare(password, user.password)
         if (!doMatch) {
             return res.status(401).json({
                 error: "Invalid Email or Pass"
